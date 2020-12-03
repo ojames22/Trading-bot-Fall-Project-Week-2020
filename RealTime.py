@@ -2,18 +2,23 @@
 #Secret_Key = 'EWUK7R5ZnF9aou7AwhrRYlkqE3dAcM1JKhSP2Vqm'
 
 #https://www.youtube.com/watch?v=Mv6c_9FqNx4
-import json
 import websocket
+import json
 
-API_Key = 'PKRJJ2QQ0IU0TXNKXFCU'
-Secret_Key = 'EWUK7R5ZnF9aou7AwhrRYlkqE3dAcM1JKhSP2Vqm'
+#WebSocketServer = require('websocket').server;
+#WebSocketClient = require('websocket').client;
+#WebSocketFrame  = require('websocket').frame;
+#WebSocketRouter = require('websocket').router;
+#W3CWebSocket = require('websocket').w3cwebsocket;
+
+API_Key = "PKRJJ2QQ0IU0TXNKXFCU"
+Secret_Key = "EWUK7R5ZnF9aou7AwhrRYlkqE3dAcM1JKhSP2Vqm"
 
 def open_stream(ws):
 	print("Opened")
 	auth_data = {
-		"action": "auth"
-		"params": API_Key
-		#"data": {'key_id': API_Key,'secret_key': Secret_Key}
+		"action": "auth",
+		"data": {"key_id": API_Key,"secret_key": Secret_Key}
 	} #Signals that the interface is ready to recieve data, logs into Alpaca with personal key id and secret key
 	#creates variable auth_data, defienes course of action in order to log into alpaca 
 	ws.send(json.dumps(auth_data)) #sends message, .dumps converts it to json stream. json - receives, stores, and transports data
@@ -22,7 +27,7 @@ def open_stream(ws):
 		#"action": "subscribe"
 		#"params": "AM.TSLA"
 	#}
-	listen_message = {'action': 'listen','data':['streams: [AM.TSLA]']}} #TSLA specific (or any ticker) 'listens' to 'data' in the
+	listen_message = {"action": "listen","data": {"streams: [AM.TSLA]"}} #TSLA specific (or any ticker) 'listens' to 'data' in the
 	#TSLA stream
 
 	ws.send(json.dumps(listen_message))
@@ -31,14 +36,14 @@ def open_stream(ws):
 	#between the stream and my terminal
 
 def on_message(ws, message): #the websocket recieves a message and that message is displayed
-	print('Recieved a message')
+	print("Recieved a message")
 	print(message)
 
 def on_close(ws):
-	print('Closed connection')
+	print("Closed connection")
 
 
-socket = 'wss://data.alpaca.markets.stream' 
+socket = "wss://data.alpaca.markets.stream" 
 
 ws = websocket.WebSocketApp(socket, open_stream=open_stream, on_message=on_message)
 ws.run_forever()
