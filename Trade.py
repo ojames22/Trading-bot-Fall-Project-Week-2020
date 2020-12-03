@@ -15,8 +15,8 @@ def get_account():
 	r = requests.get(ACCOUNT_URL, headers=HEADERS)
 
 	return json.loads(r.content)
-	#finds account and returns content. Since data is better stores in a dictionary
-	#of sorts, json is applied to store this data and make it easily visible
+	#finds account and returns content. Since data is better stored in a dictionary
+	#of sorts, json helps store this data and make it easily visible
 
 
 def create_order(symbol, qty, side, type, time_in_force):
