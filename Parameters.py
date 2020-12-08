@@ -17,6 +17,8 @@ def rec_doji
 		print("Order recieved: () shares of (ticker)")
 		self.alpaca.submit_order
 
+#multilayered algo: https://www.youtube.com/watch?v=s8uyLscRl-Q
+
 #bd=PythonTradingBot()
 #bd.run()
 rec_doji()

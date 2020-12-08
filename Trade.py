@@ -34,7 +34,7 @@ def create_order(symbol, qty, side, type, time_in_force):
 	return json.loads(r.content)
 
 
-response = create_order("AAPL", 100, "buy", "market", "gtc") #within the alpaca
+response = create_order("BBY", 100, "buy", "market", "gtc") #within the alpaca
 #API there are many options for order styped to define. For example, "gtc"
 #means good unti cancelled, meaning the order will be processed until it is
 #completed or cancelled. Another option is "day", the order will be processed
