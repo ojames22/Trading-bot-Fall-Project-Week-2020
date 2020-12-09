@@ -22,18 +22,31 @@ def on_open(ws):
 
 
 def on_message(ws, message):
-    print("received a message")
+    print("Received a message")
     print(message)
 
-    price = message["data"]["vw"]
+    print("Checking for vw in stream...")
+    price_dict = json.loads(message)
 
-    if float(price) < 629.00:
-        response = create_order("TSLA", 10, "buy", "market", "gtc")
+    #{"stream":"listening","data":{"streams":["AM.TSLA"]}}
+    #if "stream" in price_dict["stream"]["listening"]["data"]:
+    #    price = price_dict["data"]["vw"]
 
-    if float(price) > 630.00:
-        response = create_order("TSLA", 10, "sell", "market", "gtc")
+    if "stream" in price_dict:
+        if "action" in price_dict["stream"]:
+            if "stream" in price_dict["stream"]["action"]:
+                if "ev" in price_dict["stream"]["action"]["stream"]:
+                    price = price_dict["data"]["vw"]
+        #else:
+          #  print("Key unable to be located within Json dict")
 
-    return response
+                    if float(price) < 629.00:
+                        response = create_order("TSLA", 10, "buy", "market", "gtc")
+
+                    if float(price) > 630.00:
+                        response = create_order("TSLA", 10, "sell", "market", "gtc")
+
+                    print(response)
 
 
 def create_order(symbol, qty, side, type, time_in_force):
@@ -44,6 +57,7 @@ def create_order(symbol, qty, side, type, time_in_force):
         "type": type,
         "time_in_force": time_in_force
     }
+    
     r = requests.post(ORDERS_URL, json=data, headers=HEADERS)
 
     return json.loads(r.content)
