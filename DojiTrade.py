@@ -32,30 +32,47 @@ def on_message(ws, message):
     print("Checking for vw in stream...")
     price_dict = json.loads(message)
 
-    #{"stream":"listening","data":{"streams":["AM.TSLA"]}}
-    #if "stream" in price_dict["stream"]["listening"]["data"]:
-    #    price = price_dict["data"]["vw"]
-
-    #{"stream":"listening","data":{"streams":["AM.TSLA"]}}
+#{"stream":"listening","data":{"streams":["AM.TSLA"]}}
     #"stream":"AM.TSLA","data":{"ev":"AM","T":"TSLA","v":6932,"av":2192813,"op":653.76,"vw":605.0476,"o":604.86,"c":603.38,"h":606.07,"l":603.38,"a":617.879,"s":1607544180000,"e":1607544240000}}
 
-    if "stream" in price_dict:
-        if "streams" in price_dict["data"]:
-            if "streams" in price_dict["stream"]["data"]:
-                if "AM.TSLA" in price_dict["stream"]:
-                    if "vw" in price_dict["stream"]["data"]:
-                        price = price_dict["data"]["vw"]
-                        print(price)
-                #else:
-                  #  print("Key unable to be located within Json dict")
 
-                        if float(price) < 629.00:
-                             response = create_order("TSLA", 10, "buy", "market", "gtc")
+    if "data" in price_dict:
 
-                        if float(price) > 630.00:
-                            response = create_order("TSLA", 10, "sell", "market", "gtc")
+        if "vw" in price_dict["data"]:
+            price = price_dict["data"]["vw"]
+            print("Price: " + price)
+            print("Error could be a result of unfulfilled parameters. Trying again...")
 
-                        print(response)
+        if "op" in price_dict["data"]:
+            open_price = price_dict["data"]["op"]
+            
+        if "a" in price_dict["data"]:
+            prev_close_price = price_dict["data"]["a"]
+        
+        #else:
+        #    print("Key unable to be located within Json dict")
+
+            #if float(price) < float(open_price): #less than
+            #    response = create_order("TSLA", 1, "buy", "market", "gtc")
+
+            #if float(price) > float(open_price): #greater than
+            #    response = create_order("TSLA", 1, "sell", "market", "gtc")
+
+            if float(price) < float(open_price) * 0.95:
+                response = create_order("TSLA", 5, "buy", "market", "gtc")
+
+            if float(price) > float(open_price) * 1.20: #greater than
+                response = create_order("TSLA", 5, "sell", "market", "gtc")
+
+            if float(open_price) < (float(prev_close_price) * 0.85):
+                response = create_order("TSLA", 10, "buy", "market", "gtc")
+
+            if float(open_price) > (float(prev_close_price) * 1.15):
+                response = create_order("TSLA", 10, "sell", "market", "gtc")
+
+            
+
+            print(response)
 
 
 def create_order(symbol, qty, side, type, time_in_force):
