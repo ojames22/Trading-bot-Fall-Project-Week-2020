@@ -11,6 +11,7 @@ ACCOUNT_URL = "{}/v2/account".format(BASE_URL)
 ORDERS_URL = "{}/v2/orders".format(BASE_URL)
 HEADERS = {'APCA-API-KEY-ID': API_Key, 'APCA-API-SECRET-KEY': Secret_Key}
 
+
 def on_open(ws):
     print("opened")
     auth_data = {
@@ -23,6 +24,7 @@ def on_open(ws):
     listen_message = {"action": "listen", "data": {"streams": ["AM.TSLA"]}}
 
     ws.send(json.dumps(listen_message))
+
 
 
 def on_message(ws, message):
@@ -70,9 +72,8 @@ def on_message(ws, message):
             if float(open_price) > (float(prev_close_price) * 1.15):
                 response = create_order("TSLA", 10, "sell", "market", "gtc")
 
-            
-
             print(response)
+
 
 
 def create_order(symbol, qty, side, type, time_in_force):
@@ -100,9 +101,12 @@ def on_error(ws, error):
 socket = "wss://data.alpaca.markets/stream"
 
 websocket.enableTrace(True)
+
 ws = websocket.WebSocketApp(socket, on_open=on_open, on_message=on_message, on_close=on_close, on_error=on_error)
-#ws.run_forever()
+
 ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
+#ws.run_forever()
+
 
 #response = create_order("BBY", 100, "buy", "market", "gtc") 
 #print(response)
