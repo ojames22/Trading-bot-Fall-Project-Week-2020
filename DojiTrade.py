@@ -6,6 +6,10 @@ import requests
 API_Key = "PKRJJ2QQ0IU0TXNKXFCU"
 Secret_Key = "EWUK7R5ZnF9aou7AwhrRYlkqE3dAcM1JKhSP2Vqm"
 
+BASE_URL = "https://paper-api.alpaca.markets"
+ACCOUNT_URL = "{}/v2/account".format(BASE_URL)
+ORDERS_URL = "{}/v2/orders".format(BASE_URL)
+HEADERS = {'APCA-API-KEY-ID': API_Key, 'APCA-API-SECRET-KEY': Secret_Key}
 
 def on_open(ws):
     print("opened")
@@ -32,21 +36,26 @@ def on_message(ws, message):
     #if "stream" in price_dict["stream"]["listening"]["data"]:
     #    price = price_dict["data"]["vw"]
 
+    #{"stream":"listening","data":{"streams":["AM.TSLA"]}}
+    #"stream":"AM.TSLA","data":{"ev":"AM","T":"TSLA","v":6932,"av":2192813,"op":653.76,"vw":605.0476,"o":604.86,"c":603.38,"h":606.07,"l":603.38,"a":617.879,"s":1607544180000,"e":1607544240000}}
+
     if "stream" in price_dict:
-        if "action" in price_dict["stream"]:
-            if "stream" in price_dict["stream"]["action"]:
-                if "ev" in price_dict["stream"]["action"]["stream"]:
-                    price = price_dict["data"]["vw"]
-        #else:
-          #  print("Key unable to be located within Json dict")
+        if "streams" in price_dict["data"]:
+            if "streams" in price_dict["stream"]["data"]:
+                if "AM.TSLA" in price_dict["stream"]:
+                    if "vw" in price_dict["stream"]["data"]:
+                        price = price_dict["data"]["vw"]
+                        print(price)
+                #else:
+                  #  print("Key unable to be located within Json dict")
 
-                    if float(price) < 629.00:
-                        response = create_order("TSLA", 10, "buy", "market", "gtc")
+                        if float(price) < 629.00:
+                             response = create_order("TSLA", 10, "buy", "market", "gtc")
 
-                    if float(price) > 630.00:
-                        response = create_order("TSLA", 10, "sell", "market", "gtc")
+                        if float(price) > 630.00:
+                            response = create_order("TSLA", 10, "sell", "market", "gtc")
 
-                    print(response)
+                        print(response)
 
 
 def create_order(symbol, qty, side, type, time_in_force):

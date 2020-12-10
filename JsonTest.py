@@ -10,3 +10,6 @@ if float(price) > 630:
 	print("High")
 if float(price) < 630:
 	print("Low")
+
+#if "stream" in message:
+#	if "AM.TSLA" in message["stream"]
