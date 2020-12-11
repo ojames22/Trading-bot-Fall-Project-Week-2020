@@ -42,7 +42,7 @@ def on_message(ws, message):
 
         if "vw" in price_dict["data"]:
             price = price_dict["data"]["vw"]
-            print("Price: " + price)
+            print(price)
             print("Error could be a result of unfulfilled parameters. Trying again...")
 
         if "op" in price_dict["data"]:
@@ -66,10 +66,10 @@ def on_message(ws, message):
             if float(price) > float(open_price) * 1.20: #greater than
                 response = create_order("TSLA", 5, "sell", "market", "gtc")
 
-            if float(open_price) < (float(prev_close_price) * 0.85):
+            if float(open_price) < float(prev_close_price) * 0.85:
                 response = create_order("TSLA", 10, "buy", "market", "gtc")
 
-            if float(open_price) > (float(prev_close_price) * 1.15):
+            if float(open_price) > float(prev_close_price) * 1.15:
                 response = create_order("TSLA", 10, "sell", "market", "gtc")
 
             print(response)
