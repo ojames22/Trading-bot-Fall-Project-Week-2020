@@ -43,15 +43,15 @@ def welcome():
     
     clock = api.get_clock()
     print("The market is {}".format("open." if clock.is_open else "closed."))
-
-    date = "2021-1-25"
+'''
+    date = "2021-7-29"
     calendar = api.get_calendar(start=date, end=date)[0]
     print("The market opened at {} and closed at {} on {}.".format(
         calendar.open,
         calendar.close,
         date
     ))
-
+'''
 
 def on_open(ws):
 
