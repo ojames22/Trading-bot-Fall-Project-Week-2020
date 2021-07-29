@@ -179,12 +179,6 @@ ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
 
 
 
-#Note
-#This version was created in January 2021 as opposed to V1 which
-#was created during the project week of November, 2020. The first
-#version was quite minimalistic. This version will essentially
-#provide extra support and insight of the users account. The
-#algorithm will be more precisely refined to a point where real
-#profit will start to generate. I think I will call it Polar
-#AI, once it is more user friendly.
-
+'''
+More user friendly, slightly more complex algorithm
+'''
